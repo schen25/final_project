@@ -2,11 +2,14 @@ int lives = 3;
 int screenNum = 0;
 int level = 1;
 Ball ball;
+Slider slider;
 
 public void setup(){
   size(800, 800);
   ball = new Ball();
+  slider = new Slider();
   ball.display();
+  slider.display();
   
 }
 
@@ -15,6 +18,8 @@ public void draw(){
   ball.bounce();
   ball.move();
   ball.display();
+  slider.move();
+  slider.display();
 }
 
 public void respawnBall(){}
