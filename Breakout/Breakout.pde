@@ -9,6 +9,7 @@ public void setup(){
   ball = new Ball();
   slider = new Slider();
   ball.display();
+  slider = new Slider();
   slider.display();
   
 }
