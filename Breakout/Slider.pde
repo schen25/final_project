@@ -1,8 +1,9 @@
 class Slider{
-  PVector location = new PVector(width/2, height+10);
+  PVector location = new PVector(width/2, height-20);
   color col = 255;
   float h = 10;
-  float w = 30;
+  float w = 80;
+  float speed = 3;
   Slider(){
   }
   Slider(color c, float a, float b){
@@ -12,14 +13,16 @@ class Slider{
   } 
   void keyPressed(){
     if (keyCode == LEFT){
-      location.x--;
+      location.x -= speed;
     }
     if (keyCode == RIGHT){
-      location.x++;
+      location.x += speed;
     }
   }
   void move(){
-    keyPressed();
+    if (keyPressed){
+      keyPressed();
+    }
   }
   void display(){
     fill(col);
