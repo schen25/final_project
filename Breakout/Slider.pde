@@ -3,7 +3,7 @@ class Slider{
   color col = 255;
   float h = 15;
   float w = 90;
-  float speed = 3;
+  float speed = 5;
   Slider(){
   }
   Slider(color c, float a, float b, float s){
