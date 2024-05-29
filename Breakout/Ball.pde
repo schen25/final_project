@@ -1,7 +1,7 @@
 class Ball{
   PVector velocity = new PVector(4, 4);
   PVector location = new PVector(width/2, height/2);
-  float radius = 20;
+  float radius = 10;
   Ball(){
   }
   Ball(PVector vel, PVector loc, float rad){
@@ -10,10 +10,10 @@ class Ball{
     radius = rad;
   }
   void bounce(){
-     if (location.x <= 0 || location.x >= width){
+     if (location.x-radius <= 0 || location.x+radius >= width){
        velocity.x *= -1;
      }
-     if (location.y <= 0){
+     if (location.y-radius <= 0){
        velocity.y *= -1;
      }
   }
@@ -22,6 +22,6 @@ class Ball{
   }
   void display(){
     fill(255);
-    ellipse(location.x,location.y, radius, radius);
+    ellipse(location.x,location.y, radius*2, radius*2);
   }
 }

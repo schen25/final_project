@@ -14,10 +14,10 @@ class Slider{
   } 
   void keyPressed(){
     if (keyCode == LEFT){
-      location.x = location.x-speed;
+      location.x -= speed;
     }
     if (keyCode == RIGHT){
-      location.x = location.x+speed;
+      location.x += speed;
     }
     if (location.x <= 0) location.x = 0;
     if (location.x+w >= width) location.x = width-w;
