@@ -1,5 +1,5 @@
 class Ball{
-  PVector velocity = new PVector(1,1);
+  PVector velocity = new PVector(4, 4);
   PVector location = new PVector(width/2, height/2);
   float radius = 20;
   Ball(){
@@ -13,7 +13,7 @@ class Ball{
      if (location.x <= 0 || location.x >= width){
        velocity.x *= -1;
      }
-     if (location.y <= 0 || location.y >= height){
+     if (location.y <= 0){
        velocity.y *= -1;
      }
   }
