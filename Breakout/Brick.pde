@@ -1,22 +1,32 @@
 class Brick{ 
   
-int width;
-int height; 
-int xCor; 
-int yCor;
+int w;
+int h; 
+PVector location;
 color c;
 int hitsNeeded;
 PVector velocity;
 
-void move(){ 
-  
+Brick(int x, int y, int xVel, int yVel, int wid, int hei){ 
+  location = new PVector(x, y);
+  w = wid;
+  h = hei;
+  velocity = new PVector(xVel, yVel); 
+  c = color(random(255), random(255), random(255));
 } 
+
+void move(){
+  location = location.add(velocity); 
+  if (location.x > w || location.x < 0){ 
+    velocity.x *= -1;
+  } 
+} 
+  
 
 void display(){
     stroke(1);
     strokeWeight(2);
     fill(c);
-    rect(xCor, xCor, width, height);
+    rect(location.x, location.y, w, h);
   }
-  
 } 
