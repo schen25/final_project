@@ -36,11 +36,14 @@ public void draw(){
     // bounce upwards
     if ((ball.location.y+ball.radius>=slider.location.y && ball.location.y+ball.radius<slider.location.y+ball.velocity.y) && (ball.location.x>slider.location.x&&ball.location.x<=slider.location.x+slider.w)) ball.velocity.y *= -1;
     // bounce side to side
-    //if ((ball.location.x+ball.radius>=slider.location.x && ball.location.x+ball.radius<slider.location.x+ball.velocity.x) && (ball.location.y>slider.location.y&&ball.location.y<=slider.location.y+slider.h)) ball.velocity.x *= -1;
+    if ((ball.location.x+ball.radius>=slider.location.x && ball.location.x+ball.radius<slider.location.x+ball.velocity.x) && (ball.location.y>slider.location.y&&ball.location.y<=slider.location.y+slider.h)) ball.velocity.x *= -1;
     for (Brick b : wall){
       if ((ball.location.y+ball.radius>=b.location.y && ball.location.y+ball.radius<b.location.y+b.h) && (ball.location.x>b.location.x&&ball.location.x<=b.location.x+b.w) ||
         (ball.location.y-ball.radius<=b.location.y+b.h) && (ball.location.x>b.location.x&&ball.location.x<=b.location.x+b.w)
-      ) ball.velocity.y *= -1;
+      ){
+      ball.velocity.y *= -1;
+      wall.remove(b);
+      } 
     } // brick + ball collision, check this, may be buggy
     ball.move();
     ball.display();
@@ -59,7 +62,7 @@ public void respawnBall(){
   }
 }
 public void removeBrick(){}
-//public void decreaseHits(Brick){}
+public void decreaseHits(Brick b){}
 public void retryScreen(){}
 public void directionScreen(){}
 public void level1Screen(){}
