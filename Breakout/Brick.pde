@@ -12,7 +12,7 @@ Brick(int x, int y, int xVel, int yVel, int wid, int hei){
   w = wid;
   h = hei;
   velocity = new PVector(xVel, yVel); 
-  c = color(random(255), random(255), random(255));
+  c = color(155, 89, 182);
 } 
 
 void move(){
