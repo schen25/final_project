@@ -1,5 +1,5 @@
 class Ball{
-  PVector velocity = new PVector(4, 4);
+  PVector velocity = new PVector(1, 4);
   PVector location = new PVector(width/2, height/2);
   float radius = 10;
   Ball(){

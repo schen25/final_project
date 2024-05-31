@@ -25,8 +25,7 @@ public void setup(){
 
 public void draw(){
   background(0);
-  slider.move();
-  slider.display();
+  
   for (Brick b : wall){
     b.display();
   }
@@ -42,14 +41,15 @@ public void draw(){
         (ball.location.y-ball.radius<=b.location.y+b.h) && (ball.location.x>b.location.x&&ball.location.x<=b.location.x+b.w)
       ){
       ball.velocity.y *= -1;
-      wall.remove(b);
+      //wall.remove(b);
       } 
     } // brick + ball collision, check this, may be buggy
     ball.move();
     ball.display();
   }
   // issue where ball can slide along the slider
-  
+  slider.move();
+  slider.display();
   //fill(255);
   //text(ball.location.y, 50, 50, 50);
   //text(slider.location.y, 10, 50, 50);
@@ -70,3 +70,9 @@ public void level2Screen(){}
 public void level3Screen(){}
 //public void keyPressed(){}
 public void congratsScreen(){}
+public void homeScreen(){
+  background(0);
+  fill(255);
+  text("Atari Breakout", 200, height/2);
+  textSize(50);
+}
