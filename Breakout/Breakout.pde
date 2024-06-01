@@ -3,7 +3,6 @@ int screenNum = 0;
 int level = 1;
 ArrayList<Brick> wall = new ArrayList<Brick>();
 PFont font;
-PShape s;
 Ball ball;
 Slider slider;
 
@@ -14,7 +13,6 @@ public void setup(){
   //ball.display();
   slider = new Slider();
   //slider.display();
-  //s = loadShape("button.svg");
   font = createFont("PressStart2P-Regular.ttf", 50);
   for (int i = 0; i < 200; i+=25){ 
     for (int j = 0; j < 800; j+= 80){ 
@@ -60,6 +58,7 @@ public void directionScreen(){
   fill(255);
   textSize(25);
   text("◀ BACK", 150, 95);
+  if (mouseX>=50 && mouseX<= 245 && mouseY>=50 && mouseY<=115 &&mousePressed) screenNum = 0;
 }
 public void level1Screen(){
   // screen 1
@@ -70,16 +69,20 @@ public void level1Screen(){
   else{
     ball.bounce();
     // bounce upwards
-    if ((ball.location.y+ball.radius>=slider.location.y && ball.location.y+ball.radius<slider.location.y+ball.velocity.y) && (ball.location.x>slider.location.x&&ball.location.x<=slider.location.x+slider.w)) ball.velocity.y *= -1;
+    if ((ball.location.y+ball.radius>=slider.location.y && ball.location.y+ball.radius<slider.location.y+ball.velocity.y) && (ball.location.x>=slider.location.x&&ball.location.x<=slider.location.x+slider.w)) ball.velocity.y *= -1;
+    //if ((ball.location.y+ball.radius>=slider.location.y && ball.location.y+ball.radius<slider.location.y+ball.velocity.y) && (ball.location.x+ball.radius>=slider.location.x&&ball.location.x-ball.radius<=slider.location.x+slider.w)) ball.velocity.y *= -1;
     // bounce side to side
-    if ((ball.location.x+ball.radius>=slider.location.x && ball.location.x+ball.radius<slider.location.x+ball.velocity.x) && (ball.location.y>slider.location.y&&ball.location.y<=slider.location.y+slider.h)) ball.velocity.x *= -1;
+    if ((ball.location.x+ball.radius>=slider.location.x && ball.location.x+ball.radius<slider.location.x+ball.velocity.x) && (ball.location.y>=slider.location.y&&ball.location.y<=slider.location.y+slider.h)) ball.velocity.x *= -1;
+    if ((ball.location.x-ball.radius<=slider.location.x+slider.w && ball.location.x-ball.radius>slider.location.x+slider.w-ball.velocity.x) && (ball.location.y>=slider.location.y&&ball.location.y<=slider.location.y+slider.h)) ball.velocity.x *= -1;
     for (Brick b : wall){
-      if ((ball.location.y+ball.radius>=b.location.y && ball.location.y+ball.radius<b.location.y+b.h) && (ball.location.x>b.location.x&&ball.location.x<=b.location.x+b.w) ||
-        (ball.location.y-ball.radius<=b.location.y+b.h) && (ball.location.x>b.location.x&&ball.location.x<=b.location.x+b.w)
+      //text(str((ball.location.y-ball.radius<=b.location.y && ball.location.y-ball.radius<b.location.y+b.h-ball.velocity.y) && (ball.location.x>=b.location.x&&ball.location.x<b.location.x+b.w)), 500, 500);
+      //text(str(((ball.location.y+ball.radius>=b.location.y && ball.location.y+ball.radius<b.location.y+ball.velocity.y) && (ball.location.x>=b.location.x&&ball.location.x<b.location.x+b.w))), 500, 600);
+      if (((ball.location.y-ball.radius<=b.location.y+b.h && ball.location.y-ball.radius<b.location.y+b.h-ball.velocity.y) && (ball.location.x+ball.radius>=b.location.x&&ball.location.x-ball.radius<b.location.x+b.w)) ||
+        ((ball.location.y+ball.radius>=b.location.y && ball.location.y+ball.radius<b.location.y+ball.velocity.y) && (ball.location.x+ball.radius>=b.location.x&&ball.location.x-ball.radius<b.location.x+b.w))
       ){
       ball.velocity.y *= -1;
-      //wall.remove(b);
-      } 
+      b.location = new PVector(-100, -100);
+      } // can take out three, maybe check
     } // brick + ball collision, check this, may be buggy
     ball.move();
     ball.display();
@@ -87,6 +90,7 @@ public void level1Screen(){
   // issue where ball can slide along the slider
   slider.move();
   slider.display();
+  fill(100, 21, 0);
   //fill(255);
   //text(ball.location.y, 50, 50, 50);
   //text(slider.location.y, 10, 50, 50);

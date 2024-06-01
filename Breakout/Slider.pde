@@ -1,5 +1,5 @@
 class Slider{
-  PVector location = new PVector(width/2, height-50);
+  PVector location = new PVector(width/2-45, height-50);
   color col = 255;
   float h = 15;
   float w = 90;
