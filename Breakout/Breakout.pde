@@ -2,6 +2,8 @@ int lives = 3;
 int screenNum = 0;
 int level = 1;
 ArrayList<Brick> wall = new ArrayList<Brick>();
+PFont font;
+PShape s;
 Ball ball;
 Slider slider;
 
@@ -9,14 +11,16 @@ public void setup(){
   size(800, 800);
   ball = new Ball();
   slider = new Slider();
-  ball.display();
+  //ball.display();
   slider = new Slider();
-  slider.display();
+  //slider.display();
+  //s = loadShape("button.svg");
+  font = createFont("PressStart2P-Regular.ttf", 50);
   for (int i = 0; i < 200; i+=25){ 
     for (int j = 0; j < 800; j+= 80){ 
       Brick a = new Brick(j, i, 0, 0, 80, 25);
       wall.add(a);
-      a.display();
+      //a.display();
     } 
   }
   
@@ -25,7 +29,40 @@ public void setup(){
 
 public void draw(){
   background(0);
+  fill(255);
+  if (screenNum == 0) homeScreen();
+  else if (screenNum == 1) level1Screen();
+  else if (screenNum == 2) level2Screen();
+  else if (screenNum == 3) level3Screen();
+  else if (screenNum == 4) directionScreen();
+  else if (screenNum == 5) congratsScreen();
   
+  
+}
+
+public void respawnBall(){
+  if (mousePressed){
+    ball = new Ball();
+    lives--;
+  }
+}
+public void removeBrick(){}
+public void decreaseHits(Brick b){}
+public void retryScreen(){}
+public void directionScreen(){
+  // screen 4
+    // back button
+  if (mouseX>=50 && mouseX<= 245 && mouseY>=50 && mouseY<=115)fill(55);
+  else fill(0);
+  stroke(255);
+  strokeWeight(5);
+  rect(50, 50, 195, 65, 28);
+  fill(255);
+  textSize(25);
+  text("◀ BACK", 150, 95);
+}
+public void level1Screen(){
+  // screen 1
   for (Brick b : wall){
     b.display();
   }
@@ -53,26 +90,42 @@ public void draw(){
   //fill(255);
   //text(ball.location.y, 50, 50, 50);
   //text(slider.location.y, 10, 50, 50);
-}
-
-public void respawnBall(){
-  if (mousePressed){
-    ball = new Ball();
-    lives--;
-  }
-}
-public void removeBrick(){}
-public void decreaseHits(Brick b){}
-public void retryScreen(){}
-public void directionScreen(){}
-public void level1Screen(){}
-public void level2Screen(){}
-public void level3Screen(){}
+} 
+public void level2Screen(){} // screen 2
+public void level3Screen(){} // screen 3
 //public void keyPressed(){}
-public void congratsScreen(){}
+public void congratsScreen(){} // screen 5
 public void homeScreen(){
+    // screen 0
   background(0);
   fill(255);
-  text("Atari Breakout", 200, height/2);
-  textSize(50);
+  textFont(font);
+  textAlign(CENTER);
+  text("Atari\nBreakout", width/2, height/2-200);
+    // play button
+  if (mouseX>=width/2-175 && mouseX<= width/2+175 && mouseY>=height/2-50 && mouseY<=height/2+15){
+    fill(200);
+    stroke(200);
+  }
+  else {
+    fill(255);
+    stroke(255);
+  }
+  rect(width/2-175, height/2-50, 350, 65, 28);
+  fill(0);
+  textSize(25);
+  text("PLAY ▶", width/2, height/2);
+    // directions button
+  if (mouseX>=width/2-175 && mouseX<= width/2+175 && mouseY>=height/2+40 && mouseY<=height/2+115)fill(55);
+  else fill(0);
+  stroke(255);
+  strokeWeight(5);
+  rect(width/2-175, height/2+40, 350, 65, 28);
+  fill(255);
+  textSize(25);
+  text("DIRECTIONS", width/2, height/2+90);
+    // if play button is clicked go to level1Screen
+  if (mouseX>=width/2-175 && mouseX<= width/2+175 && mouseY>=height/2-50 && mouseY<=height/2+15 && mousePressed) screenNum = 1;
+  if (mouseX>=width/2-175 && mouseX<= width/2+175 && mouseY>=height/2+40 && mouseY<=height/2+115 && mousePressed) screenNum = 4;
+  
 }
