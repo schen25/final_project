@@ -69,20 +69,46 @@ public void level1Screen(){
   else{
     ball.bounce();
     // bounce upwards
-    if ((ball.location.y+ball.radius>=slider.location.y && ball.location.y+ball.radius<slider.location.y+ball.velocity.y) && (ball.location.x>=slider.location.x&&ball.location.x<=slider.location.x+slider.w)) ball.velocity.y *= -1;
-    //if ((ball.location.y+ball.radius>=slider.location.y && ball.location.y+ball.radius<slider.location.y+ball.velocity.y) && (ball.location.x+ball.radius>=slider.location.x&&ball.location.x-ball.radius<=slider.location.x+slider.w)) ball.velocity.y *= -1;
-    // bounce side to side
-    if ((ball.location.x+ball.radius>=slider.location.x && ball.location.x+ball.radius<slider.location.x+ball.velocity.x) && (ball.location.y>=slider.location.y&&ball.location.y<=slider.location.y+slider.h)) ball.velocity.x *= -1;
-    if ((ball.location.x-ball.radius<=slider.location.x+slider.w && ball.location.x-ball.radius>slider.location.x+slider.w-ball.velocity.x) && (ball.location.y>=slider.location.y&&ball.location.y<=slider.location.y+slider.h)) ball.velocity.x *= -1;
-    for (Brick b : wall){
-      //text(str((ball.location.y-ball.radius<=b.location.y && ball.location.y-ball.radius<b.location.y+b.h-ball.velocity.y) && (ball.location.x>=b.location.x&&ball.location.x<b.location.x+b.w)), 500, 500);
-      //text(str(((ball.location.y+ball.radius>=b.location.y && ball.location.y+ball.radius<b.location.y+ball.velocity.y) && (ball.location.x>=b.location.x&&ball.location.x<b.location.x+b.w))), 500, 600);
-      if (((ball.location.y-ball.radius<=b.location.y+b.h && ball.location.y-ball.radius<b.location.y+b.h-ball.velocity.y) && (ball.location.x+ball.radius>=b.location.x&&ball.location.x-ball.radius<b.location.x+b.w)) ||
-        ((ball.location.y+ball.radius>=b.location.y && ball.location.y+ball.radius<b.location.y+ball.velocity.y) && (ball.location.x+ball.radius>=b.location.x&&ball.location.x-ball.radius<b.location.x+b.w))
-      ){
+    if ((ball.location.y+ball.radius>=slider.location.y && ball.location.y+ball.radius<slider.location.y+slider.h) && (ball.location.x+ball.radius>=slider.location.x&&ball.location.x-ball.radius<=slider.location.x+slider.w)){
       ball.velocity.y *= -1;
-      b.location = new PVector(-100, -100);
-      } // can take out three, maybe check
+      //ball.velocity.x = random(-3, 3) + 1; if random bounce
+      ball.location.y = slider.location.y-ball.radius-1;
+    } 
+    if ((ball.location.x+ball.radius>=slider.location.x && ball.location.x+ball.radius<slider.location.x+slider.w) && (ball.location.y+ball.radius>=slider.location.y&&ball.location.y-ball.radius<=slider.location.y+slider.h)) {
+      ball.velocity.x = -1*slider.speed;
+      ball.location.x = slider.location.x-ball.radius-1; // slider x speed is faster so if move, it'll stick
+    }
+    if ((ball.location.x-ball.radius<=slider.location.x+slider.w && ball.location.x-ball.radius>slider.location.x) && (ball.location.y+ball.radius>=slider.location.y&&ball.location.y-ball.radius<=slider.location.y+slider.h)){
+      ball.velocity.x = slider.speed;
+      ball.location.x = slider.location.x+slider.w+ball.radius+1;
+    } 
+    //if ((ball.location.y+ball.radius>=slider.location.y && ball.location.y+ball.radius<slider.location.y+ball.velocity.y) && (ball.location.x>=slider.location.x&&ball.location.x<=slider.location.x+slider.w)) ball.velocity.y *= -1;
+      //if ((ball.location.y+ball.radius>=slider.location.y && ball.location.y+ball.radius<slider.location.y+ball.velocity.y) && (ball.location.x+ball.radius>=slider.location.x&&ball.location.x-ball.radius<=slider.location.x+slider.w)) ball.velocity.y *= -1;
+    // bounce side to side
+    //if ((ball.location.x+ball.radius>=slider.location.x && ball.location.x+ball.radius<slider.location.x+ball.velocity.x) && (ball.location.y>=slider.location.y&&ball.location.y<=slider.location.y+slider.h)) ball.velocity.x *= -1;
+    //if ((ball.location.x-ball.radius<=slider.location.x+slider.w && ball.location.x-ball.radius>slider.location.x+slider.w-ball.velocity.x) && (ball.location.y>=slider.location.y&&ball.location.y<=slider.location.y+slider.h)) ball.velocity.x *= -1;
+    for (Brick b : wall){
+      // bottom or top of brick hit, kinda buggy, if it hits 2 simultaneously, it keeps going up
+      if (((ball.location.y-ball.radius<=b.location.y+b.h && ball.location.y-ball.radius>b.location.y) && (ball.location.x+ball.radius>=b.location.x&&ball.location.x-ball.radius<b.location.x+b.w)) ||
+          ((ball.location.y+ball.radius>=b.location.y && ball.location.y+ball.radius<b.location.y+b.h) && (ball.location.x+ball.radius>=b.location.x&&ball.location.x-ball.radius<b.location.x+b.w))
+      ){
+        ball.velocity.y *= -1;
+        b.location = new PVector(-100, -100);
+      }
+      // sides of brick hit
+      if (((ball.location.x-ball.radius<=b.location.x+b.w && ball.location.x-ball.radius>b.location.x) && (ball.location.y+ball.radius>=b.location.y&&ball.location.y-ball.radius<b.location.y+b.h)) ||
+          ((ball.location.x+ball.radius>=b.location.x && ball.location.x+ball.radius<b.location.x+b.w) && (ball.location.y+ball.radius>=b.location.y&&ball.location.y-ball.radius<b.location.y+b.h))
+      ){
+        ball.velocity.x *= -1;
+        b.location = new PVector(-100, -100);
+      }
+      
+        //if (((ball.location.y-ball.radius<=b.location.y+b.h && ball.location.y-ball.radius<b.location.y+b.h-ball.velocity.y) && (ball.location.x+ball.radius>=b.location.x&&ball.location.x-ball.radius<b.location.x+b.w)) ||
+        //  ((ball.location.y+ball.radius>=b.location.y && ball.location.y+ball.radius<b.location.y+ball.velocity.y) && (ball.location.x+ball.radius>=b.location.x&&ball.location.x-ball.radius<b.location.x+b.w))
+        //){
+        //ball.velocity.y *= -1;
+        //b.location = new PVector(-100, -100);
+        //} // can take out three, maybe check
     } // brick + ball collision, check this, may be buggy
     ball.move();
     ball.display();
