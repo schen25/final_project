@@ -14,7 +14,7 @@ public void setup(){
   slider = new Slider();
   //slider.display();
   font = createFont("PressStart2P-Regular.ttf", 50);
-  for (int i = 0; i < 200; i+=25){ 
+  for (int i = 200; i < 325; i+=25){ 
     for (int j = 0; j < 800; j+= 80){ 
       Brick a = new Brick(j, i, 0, 0, 80, 25);
       wall.add(a);
@@ -82,11 +82,6 @@ public void level1Screen(){
       ball.velocity.x = slider.speed;
       ball.location.x = slider.location.x+slider.w+ball.radius+1;
     } 
-    //if ((ball.location.y+ball.radius>=slider.location.y && ball.location.y+ball.radius<slider.location.y+ball.velocity.y) && (ball.location.x>=slider.location.x&&ball.location.x<=slider.location.x+slider.w)) ball.velocity.y *= -1;
-      //if ((ball.location.y+ball.radius>=slider.location.y && ball.location.y+ball.radius<slider.location.y+ball.velocity.y) && (ball.location.x+ball.radius>=slider.location.x&&ball.location.x-ball.radius<=slider.location.x+slider.w)) ball.velocity.y *= -1;
-    // bounce side to side
-    //if ((ball.location.x+ball.radius>=slider.location.x && ball.location.x+ball.radius<slider.location.x+ball.velocity.x) && (ball.location.y>=slider.location.y&&ball.location.y<=slider.location.y+slider.h)) ball.velocity.x *= -1;
-    //if ((ball.location.x-ball.radius<=slider.location.x+slider.w && ball.location.x-ball.radius>slider.location.x+slider.w-ball.velocity.x) && (ball.location.y>=slider.location.y&&ball.location.y<=slider.location.y+slider.h)) ball.velocity.x *= -1;
     for (Brick b : wall){
       // bottom or top of brick hit, kinda buggy, if it hits 2 simultaneously, it keeps going up
       if (((ball.location.y-ball.radius<=b.location.y+b.h && ball.location.y-ball.radius>b.location.y) && (ball.location.x+ball.radius>=b.location.x&&ball.location.x-ball.radius<b.location.x+b.w)) ||
@@ -102,12 +97,6 @@ public void level1Screen(){
         ball.velocity.x *= -1;
         b.location = new PVector(-100, -100);
       }
-      
-        //if (((ball.location.y-ball.radius<=b.location.y+b.h && ball.location.y-ball.radius<b.location.y+b.h-ball.velocity.y) && (ball.location.x+ball.radius>=b.location.x&&ball.location.x-ball.radius<b.location.x+b.w)) ||
-        //  ((ball.location.y+ball.radius>=b.location.y && ball.location.y+ball.radius<b.location.y+ball.velocity.y) && (ball.location.x+ball.radius>=b.location.x&&ball.location.x-ball.radius<b.location.x+b.w))
-        //){
-        //ball.velocity.y *= -1;
-        //b.location = new PVector(-100, -100);
         //} // can take out three, maybe check
     } // brick + ball collision, check this, may be buggy
     ball.move();
