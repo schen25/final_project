@@ -83,11 +83,14 @@ public void level1Screen(){
       ball.location.x = slider.location.x+slider.w+ball.radius+1;
     } 
     for (Brick b : wall){
-      // bottom or top of brick hit, kinda buggy, if it hits 2 simultaneously, it keeps going up
-      if (((ball.location.y-ball.radius<=b.location.y+b.h && ball.location.y-ball.radius>b.location.y) && (ball.location.x+ball.radius>=b.location.x&&ball.location.x-ball.radius<b.location.x+b.w)) ||
-          ((ball.location.y+ball.radius>=b.location.y && ball.location.y+ball.radius<b.location.y+b.h) && (ball.location.x+ball.radius>=b.location.x&&ball.location.x-ball.radius<b.location.x+b.w))
-      ){
-        ball.velocity.y *= -1;
+      // bottom brick hit
+      if (((ball.location.y-ball.radius<=b.location.y+b.h && ball.location.y-ball.radius>b.location.y) && (ball.location.x+ball.radius>=b.location.x&&ball.location.x-ball.radius<b.location.x+b.w)) ){
+        ball.velocity.y = 5;
+        b.location = new PVector(-100, -100);
+      }
+      //top brick hit
+      if ((ball.location.y+ball.radius>=b.location.y && ball.location.y+ball.radius<b.location.y+b.h) && (ball.location.x+ball.radius>=b.location.x&&ball.location.x-ball.radius<b.location.x+b.w)){
+        ball.velocity.y = -5;
         b.location = new PVector(-100, -100);
       }
       // sides of brick hit
