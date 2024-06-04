@@ -3,6 +3,8 @@ int screenNum = 0;
 int level = 1;
 ArrayList<Brick> wall = new ArrayList<Brick>();
 PFont font;
+PImage fullHeart;
+PImage emptyHeart;
 Ball ball;
 Slider slider;
 
@@ -10,19 +12,16 @@ public void setup(){
   size(800, 800);
   ball = new Ball();
   slider = new Slider();
-  //ball.display();
   slider = new Slider();
-  //slider.display();
   font = createFont("PressStart2P-Regular.ttf", 50);
   for (int i = 200; i < 325; i+=25){ 
     for (int j = 0; j < 800; j+= 80){ 
       Brick a = new Brick(j, i, 0, 0, 80, 25);
       wall.add(a);
-      //a.display();
     } 
   }
-  
-  
+  fullHeart = loadImage("fullHeart.png");
+  emptyHeart = loadImage("emptyHeart.png");
 }
 
 public void draw(){
@@ -39,9 +38,9 @@ public void draw(){
 }
 
 public void respawnBall(){
+  ball = new Ball(new PVector(0,0), new PVector(-100, -100), 10);
   if (mousePressed){
     ball = new Ball();
-    lives--;
   }
 }
 public void removeBrick(){}
@@ -93,11 +92,14 @@ public void level1Screen(){
         ball.velocity.y = -5;
         b.location = new PVector(-100, -100);
       }
-      // sides of brick hit
-      if (((ball.location.x-ball.radius<=b.location.x+b.w && ball.location.x-ball.radius>b.location.x) && (ball.location.y+ball.radius>=b.location.y&&ball.location.y-ball.radius<b.location.y+b.h)) ||
-          ((ball.location.x+ball.radius>=b.location.x && ball.location.x+ball.radius<b.location.x+b.w) && (ball.location.y+ball.radius>=b.location.y&&ball.location.y-ball.radius<b.location.y+b.h))
-      ){
-        ball.velocity.x *= -1;
+      // right hit
+      if ((ball.location.x-ball.radius<=b.location.x+b.w && ball.location.x-ball.radius>b.location.x) && (ball.location.y+ball.radius>=b.location.y&&ball.location.y-ball.radius<b.location.y+b.h)){
+        ball.velocity.x =1;
+        b.location = new PVector(-100, -100);
+      }
+      // left hit
+      if ((ball.location.x+ball.radius>=b.location.x && ball.location.x+ball.radius<b.location.x+b.w) && (ball.location.y+ball.radius>=b.location.y&&ball.location.y-ball.radius<b.location.y+b.h)){
+        ball.velocity.x =-1 ;
         b.location = new PVector(-100, -100);
       }
         //} // can take out three, maybe check
@@ -112,6 +114,14 @@ public void level1Screen(){
   //fill(255);
   //text(ball.location.y, 50, 50, 50);
   //text(slider.location.y, 10, 50, 50);
+  
+  // hearts
+  if (lives > 0)image(fullHeart, 30, 30);
+  else image(emptyHeart, 30, 30);
+  if (lives > 1)image(fullHeart, 90, 30);
+  else image(emptyHeart, 90, 30);
+  if (lives > 2)image(fullHeart, 150, 30);
+  else image(emptyHeart, 150, 30);
 } 
 public void level2Screen(){} // screen 2
 public void level3Screen(){} // screen 3
