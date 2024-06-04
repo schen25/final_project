@@ -38,9 +38,9 @@ public void draw(){
 }
 
 public void respawnBall(){
-  ball = new Ball(new PVector(0,0), new PVector(-100, -100), 10);
   if (mousePressed){
     ball = new Ball();
+    lives--;
   }
 }
 public void removeBrick(){}
