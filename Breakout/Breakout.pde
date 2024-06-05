@@ -24,7 +24,6 @@ public void setup(){
   fullHeart = loadImage("fullHeart.png");
   emptyHeart = loadImage("emptyHeart.png");
   fallen=false;
-  toBeSpawned = true;
 }
 
 public void draw(){
@@ -88,7 +87,7 @@ public void level1Screen(){
     // bounce upwards
     if ((ball.location.y+ball.radius>=slider.location.y && ball.location.y+ball.radius<slider.location.y+slider.h) && (ball.location.x+ball.radius>=slider.location.x&&ball.location.x-ball.radius<=slider.location.x+slider.w)){
       ball.velocity.y *= -1;
-      //ball.velocity.x = random(-3, 3) + 1; if random bounce
+      ball.velocity.x = (random(0,5))-2; //if random bounce
       ball.location.y = slider.location.y-ball.radius-1;
     } 
     if ((ball.location.x+ball.radius>=slider.location.x && ball.location.x+ball.radius<slider.location.x+slider.w) && (ball.location.y+ball.radius>=slider.location.y&&ball.location.y-ball.radius<=slider.location.y+slider.h)) {
@@ -103,11 +102,13 @@ public void level1Screen(){
       // bottom brick hit
       if (((ball.location.y-ball.radius<=b.location.y+b.h && ball.location.y-ball.radius>b.location.y) && (ball.location.x+ball.radius>=b.location.x&&ball.location.x-ball.radius<b.location.x+b.w)) ){
         ball.velocity.y = 5;
+        ball.velocity.x = (random(0,5))-2;
         b.location = new PVector(-100, -100);
       }
       //top brick hit
       if ((ball.location.y+ball.radius>=b.location.y && ball.location.y+ball.radius<b.location.y+b.h) && (ball.location.x+ball.radius>=b.location.x&&ball.location.x-ball.radius<b.location.x+b.w)){
         ball.velocity.y = -5;
+        ball.velocity.x = (random(0,5))-2;
         b.location = new PVector(-100, -100);
       }
       // right hit
