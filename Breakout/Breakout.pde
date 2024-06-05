@@ -1,5 +1,5 @@
 int lives = 3;
-int screenNum = 0;
+int screenNum = 7;
 int level = 1;
 ArrayList<Brick> wall = new ArrayList<Brick>();
 PFont font;
@@ -8,6 +8,7 @@ PImage emptyHeart;
 Ball ball;
 Slider slider;
 boolean fallen;
+int bricksLeft;
 
 public void setup(){
   size(800, 800);
@@ -19,11 +20,12 @@ public void setup(){
     for (int j = 0; j < 800; j+= 80){ 
       Brick a = new Brick(j, i, 0, 0, 80, 25);
       wall.add(a);
+      bricksLeft++;
     } 
   }
   fullHeart = loadImage("fullHeart.png");
   emptyHeart = loadImage("emptyHeart.png");
-  fallen=false;
+  fallen=true;
 }
 
 public void draw(){
@@ -36,6 +38,7 @@ public void draw(){
   else if (screenNum == 4) directionScreen();
   else if (screenNum == 5) congratsScreen();
   else if (screenNum == 6) retryScreen();
+  else if (screenNum == 7) nextLevelScreen();
   
   
 }
@@ -67,6 +70,7 @@ public void directionScreen(){
   text("◀ BACK", 150, 95);
   if (mouseX>=50 && mouseX<= 245 && mouseY>=50 && mouseY<=115 &&mousePressed) screenNum = 0;
 }
+
 public void level1Screen(){
   //text(ball.location.y, 100, 100);
   //text(fallen + "", 100, 150);
@@ -104,22 +108,26 @@ public void level1Screen(){
         ball.velocity.y = 5;
         ball.velocity.x = (random(0,5))-2;
         b.location = new PVector(-100, -100);
+        bricksLeft--;
       }
       //top brick hit
       if ((ball.location.y+ball.radius>=b.location.y && ball.location.y+ball.radius<b.location.y+b.h) && (ball.location.x+ball.radius>=b.location.x&&ball.location.x-ball.radius<b.location.x+b.w)){
         ball.velocity.y = -5;
         ball.velocity.x = (random(0,5))-2;
         b.location = new PVector(-100, -100);
+        bricksLeft--;
       }
       // right hit
       if ((ball.location.x-ball.radius<=b.location.x+b.w && ball.location.x-ball.radius>b.location.x) && (ball.location.y+ball.radius>=b.location.y&&ball.location.y-ball.radius<b.location.y+b.h)){
         ball.velocity.x =1;
         b.location = new PVector(-100, -100);
+        bricksLeft--;
       }
       // left hit
       if ((ball.location.x+ball.radius>=b.location.x && ball.location.x+ball.radius<b.location.x+b.w) && (ball.location.y+ball.radius>=b.location.y&&ball.location.y-ball.radius<b.location.y+b.h)){
         ball.velocity.x =-1 ;
         b.location = new PVector(-100, -100);
+        bricksLeft--;
       }
         //} // can take out three, maybe check
     } // brick + ball collision, check this, may be buggy
@@ -142,11 +150,20 @@ public void level1Screen(){
   else image(emptyHeart, 90, 30);
   if (lives > 2)image(fullHeart, 150, 30);
   else image(emptyHeart, 150, 30);
+  if (bricksLeft == 0) screenNum = 7;
 } 
 public void level2Screen(){} // screen 2
 public void level3Screen(){} // screen 3
 //public void keyPressed(){}
 public void congratsScreen(){} // screen 5
+public void nextLevelScreen(){
+  // screen 7
+  fill(55);
+  stroke(255);
+  strokeWeight(5);
+  rect(width/2-225, height/2-100, 450, 200, 28);
+  //text("You passed this level! Move on to the next level.", 
+} 
 public void homeScreen(){
     // screen 0
   fill(255);
