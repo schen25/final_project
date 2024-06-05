@@ -7,6 +7,7 @@ PImage fullHeart;
 PImage emptyHeart;
 Ball ball;
 Slider slider;
+boolean fallen;
 
 public void setup(){
   size(800, 800);
@@ -22,6 +23,8 @@ public void setup(){
   }
   fullHeart = loadImage("fullHeart.png");
   emptyHeart = loadImage("emptyHeart.png");
+  fallen=false;
+  toBeSpawned = true;
 }
 
 public void draw(){
@@ -33,19 +36,25 @@ public void draw(){
   else if (screenNum == 3) level3Screen();
   else if (screenNum == 4) directionScreen();
   else if (screenNum == 5) congratsScreen();
+  else if (screenNum == 6) retryScreen();
   
   
 }
 
 public void respawnBall(){
+  fill(255);
+  text("Click to spawn ball.", width/2, height/2+100);
   if (mousePressed){
     ball = new Ball();
-    lives--;
+    fallen = false;
   }
 }
 public void removeBrick(){}
 public void decreaseHits(Brick b){}
-public void retryScreen(){}
+public void retryScreen(){
+  // screen6
+  
+}
 public void directionScreen(){
   // screen 4
     // back button
@@ -60,12 +69,21 @@ public void directionScreen(){
   if (mouseX>=50 && mouseX<= 245 && mouseY>=50 && mouseY<=115 &&mousePressed) screenNum = 0;
 }
 public void level1Screen(){
+  //text(ball.location.y, 100, 100);
+  //text(fallen + "", 100, 150);
   // screen 1
   for (Brick b : wall){
     b.display();
   }
-  if (ball.location.y>=height) respawnBall();
+  if (ball.location.y>=height) {
+    lives--;
+    ball.location = new PVector(-100, -100);
+    ball.velocity = new PVector(0,0);
+    fallen = true;
+  }
   else{
+    if (fallen) respawnBall();
+    else{
     ball.bounce();
     // bounce upwards
     if ((ball.location.y+ball.radius>=slider.location.y && ball.location.y+ball.radius<slider.location.y+slider.h) && (ball.location.x+ball.radius>=slider.location.x&&ball.location.x-ball.radius<=slider.location.x+slider.w)){
@@ -107,6 +125,7 @@ public void level1Screen(){
     ball.move();
     ball.display();
   }
+  }
   // issue where ball can slide along the slider
   slider.move();
   slider.display();
@@ -129,7 +148,6 @@ public void level3Screen(){} // screen 3
 public void congratsScreen(){} // screen 5
 public void homeScreen(){
     // screen 0
-  background(0);
   fill(255);
   textFont(font);
   textAlign(CENTER);
