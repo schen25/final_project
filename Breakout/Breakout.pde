@@ -2,6 +2,7 @@ int lives = 3;
 int screenNum = 0;
 int level = 1;
 ArrayList<Brick> wall = new ArrayList<Brick>();
+ArrayList<Brick> wallCopy = new ArrayList<Brick>();
 PFont font;
 PImage fullHeart;
 PImage emptyHeart;
@@ -25,6 +26,7 @@ public void setup(){
       bricksLeft++;
     } 
   }
+  wallCopy = (ArrayList)wall.clone();
   fullHeart = loadImage("fullHeart.png");
   emptyHeart = loadImage("emptyHeart.png");
   fallen=true;
@@ -93,7 +95,7 @@ public void retryScreen(){
     if (mousePressed){screenNum = 0;
     lives = 3;
     mousePressed = false;
-    wall = new ArrayList<Brick>(); // make copy of orig array?
+    wall = (ArrayList)wallCopy.clone(); // make copy of orig array?
     slider.location = new PVector(width/2-45, height-50);
     }
   }else fill(55);
