@@ -85,7 +85,7 @@ public void retryScreen(){
       screenNum = level;
       lives = 3;
       mousePressed = false;
-      wall = new ArrayList<Brick>();
+      wall = (ArrayList)wallCopy.clone();
       slider.location = new PVector(width/2-45, height-50);
     }
   }else fill(55);
