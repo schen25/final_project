@@ -3,26 +3,33 @@ int screenNum = 0;
 int level = 1;
 ArrayList<Brick> wall = new ArrayList<Brick>();
 PFont font;
+PImage fullHeart;
+PImage emptyHeart;
 Ball ball;
 Slider slider;
+boolean fallen;
+int bricksLeft;
+// for text color stuff
+int textAnimCol = 255;
+boolean gradientDirection = false;
 
 public void setup(){
   size(800, 800);
   ball = new Ball();
   slider = new Slider();
-  //ball.display();
-  slider = new Slider();
-  //slider.display();
+  color[] colors = {color(210, 43, 43), color(242, 140, 40), color(80, 200, 120), color(0, 150, 255), color(155, 89, 182)};
   font = createFont("PressStart2P-Regular.ttf", 50);
   for (int i = 200; i < 325; i+=25){ 
     for (int j = 0; j < 800; j+= 80){ 
-      Brick a = new Brick(j, i, 0, 0, 80, 25);
+      Brick a = new Brick(j, i, 0, 0, 80, 25, colors[(i-200)/25]);
       wall.add(a);
-      //a.display();
+      bricksLeft++;
     } 
   }
-  
-  
+  fullHeart = loadImage("fullHeart.png");
+  emptyHeart = loadImage("emptyHeart.png");
+  fallen=true;
+  frameRate(100);
 }
 
 public void draw(){
@@ -34,19 +41,71 @@ public void draw(){
   else if (screenNum == 3) level3Screen();
   else if (screenNum == 4) directionScreen();
   else if (screenNum == 5) congratsScreen();
+  else if (screenNum == 6) retryScreen();
+  else if (screenNum == 7) nextLevelScreen();
   
   
 }
 
 public void respawnBall(){
+  // text color animation thing
+  fill(textAnimCol);
+  if (gradientDirection)textAnimCol+=4;
+  else textAnimCol-=4;
+  if (textAnimCol > 255){
+    textAnimCol = 255;
+    gradientDirection = false;
+  }
+  if (textAnimCol <30){
+    textAnimCol = 30;
+    gradientDirection = true;
+  }
+  //respawn stuff
+  stroke(0);
+  strokeWeight(1);
+  text("Click to spawn ball.", width/2, height/2+100);
   if (mousePressed){
     ball = new Ball();
-    lives--;
+    ball.velocity.x = (random(0,4))-2; //randomize direction
+    fallen = false;
   }
 }
 public void removeBrick(){}
 public void decreaseHits(Brick b){}
-public void retryScreen(){}
+public void retryScreen(){
+  // screen6
+  fill(55);
+  stroke(255);
+  strokeWeight(5);
+  rect(width/2-325, height/2-150, 650, 300, 28);
+  if (mouseX>=width/2+10 && mouseX<= width/2+130 && mouseY>=height/2+40 && mouseY<=height/2+120){
+    fill(75);
+    if (mousePressed) {
+      screenNum = level;
+      lives = 3;
+      mousePressed = false;
+      wall = new ArrayList<Brick>();
+      slider.location = new PVector(width/2-45, height-50);
+    }
+  }else fill(55);
+  rect(width/2+10, height/2+40, 120, 80, 28);
+  if (mouseX>=width/2-130 && mouseX<= width/2-10 && mouseY>=height/2+40 && mouseY<=height/2+120) {
+    fill(75);
+    if (mousePressed){screenNum = 0;
+    lives = 3;
+    mousePressed = false;
+    wall = new ArrayList<Brick>(); // make copy of orig array?
+    slider.location = new PVector(width/2-45, height-50);
+    }
+  }else fill(55);
+  rect(width/2-130, height/2+40, 120, 80, 28);
+  fill(255);
+  text("You lost all your life!", width/2, height/2-25);
+  textSize(20);
+  text("Retry", width/2+70, height/2+90);
+  text("Back", width/2-70, height/2+90);
+  textSize(25);
+}
 public void directionScreen(){
   // screen 4
     // back button
@@ -60,18 +119,29 @@ public void directionScreen(){
   text("◀ BACK", 150, 95);
   if (mouseX>=50 && mouseX<= 245 && mouseY>=50 && mouseY<=115 &&mousePressed) screenNum = 0;
 }
+
 public void level1Screen(){
+  //text(ball.location.y, 100, 100);
+  //text(fallen + "", 100, 150);
   // screen 1
+  text("Level 1",650, 80);
   for (Brick b : wall){
     b.display();
   }
-  if (ball.location.y>=height) respawnBall();
+  if (ball.location.y>=height) {
+    lives--;
+    ball.location = new PVector(-100, -100);
+    ball.velocity = new PVector(0,0);
+    fallen = true;
+  }
   else{
+    if (fallen) respawnBall();
+    else{
     ball.bounce();
     // bounce upwards
     if ((ball.location.y+ball.radius>=slider.location.y && ball.location.y+ball.radius<slider.location.y+slider.h) && (ball.location.x+ball.radius>=slider.location.x&&ball.location.x-ball.radius<=slider.location.x+slider.w)){
       ball.velocity.y *= -1;
-      //ball.velocity.x = random(-3, 3) + 1; if random bounce
+      ball.velocity.x = (random(0,4))-2; //if random bounce
       ball.location.y = slider.location.y-ball.radius-1;
     } 
     if ((ball.location.x+ball.radius>=slider.location.x && ball.location.x+ball.radius<slider.location.x+slider.w) && (ball.location.y+ball.radius>=slider.location.y&&ball.location.y-ball.radius<=slider.location.y+slider.h)) {
@@ -82,36 +152,38 @@ public void level1Screen(){
       ball.velocity.x = slider.speed;
       ball.location.x = slider.location.x+slider.w+ball.radius+1;
     } 
-    //if ((ball.location.y+ball.radius>=slider.location.y && ball.location.y+ball.radius<slider.location.y+ball.velocity.y) && (ball.location.x>=slider.location.x&&ball.location.x<=slider.location.x+slider.w)) ball.velocity.y *= -1;
-      //if ((ball.location.y+ball.radius>=slider.location.y && ball.location.y+ball.radius<slider.location.y+ball.velocity.y) && (ball.location.x+ball.radius>=slider.location.x&&ball.location.x-ball.radius<=slider.location.x+slider.w)) ball.velocity.y *= -1;
-    // bounce side to side
-    //if ((ball.location.x+ball.radius>=slider.location.x && ball.location.x+ball.radius<slider.location.x+ball.velocity.x) && (ball.location.y>=slider.location.y&&ball.location.y<=slider.location.y+slider.h)) ball.velocity.x *= -1;
-    //if ((ball.location.x-ball.radius<=slider.location.x+slider.w && ball.location.x-ball.radius>slider.location.x+slider.w-ball.velocity.x) && (ball.location.y>=slider.location.y&&ball.location.y<=slider.location.y+slider.h)) ball.velocity.x *= -1;
-    for (Brick b : wall){
-      // bottom or top of brick hit, kinda buggy, if it hits 2 simultaneously, it keeps going up
-      if (((ball.location.y-ball.radius<=b.location.y+b.h && ball.location.y-ball.radius>b.location.y) && (ball.location.x+ball.radius>=b.location.x&&ball.location.x-ball.radius<b.location.x+b.w)) ||
-          ((ball.location.y+ball.radius>=b.location.y && ball.location.y+ball.radius<b.location.y+b.h) && (ball.location.x+ball.radius>=b.location.x&&ball.location.x-ball.radius<b.location.x+b.w))
-      ){
-        ball.velocity.y *= -1;
+    for (Brick b : wall){  //maybe make it less than radius
+      // bottom brick hit
+      if (((ball.location.y-ball.radius<=b.location.y+b.h && ball.location.y-ball.radius>b.location.y) && (ball.location.x+ball.radius>=b.location.x&&ball.location.x-ball.radius<b.location.x+b.w)) ){
+        ball.velocity.y = 5;
+        ball.velocity.x = (random(0,5))-2;
         b.location = new PVector(-100, -100);
+        bricksLeft--;
       }
-      // sides of brick hit
-      if (((ball.location.x-ball.radius<=b.location.x+b.w && ball.location.x-ball.radius>b.location.x) && (ball.location.y+ball.radius>=b.location.y&&ball.location.y-ball.radius<b.location.y+b.h)) ||
-          ((ball.location.x+ball.radius>=b.location.x && ball.location.x+ball.radius<b.location.x+b.w) && (ball.location.y+ball.radius>=b.location.y&&ball.location.y-ball.radius<b.location.y+b.h))
-      ){
-        ball.velocity.x *= -1;
+      //top brick hit
+      if ((ball.location.y+ball.radius>=b.location.y && ball.location.y+ball.radius<b.location.y+b.h) && (ball.location.x+ball.radius>=b.location.x&&ball.location.x-ball.radius<b.location.x+b.w)){
+        ball.velocity.y = -5;
+        ball.velocity.x = (random(0,5))-2;
         b.location = new PVector(-100, -100);
+        bricksLeft--;
       }
-      
-        //if (((ball.location.y-ball.radius<=b.location.y+b.h && ball.location.y-ball.radius<b.location.y+b.h-ball.velocity.y) && (ball.location.x+ball.radius>=b.location.x&&ball.location.x-ball.radius<b.location.x+b.w)) ||
-        //  ((ball.location.y+ball.radius>=b.location.y && ball.location.y+ball.radius<b.location.y+ball.velocity.y) && (ball.location.x+ball.radius>=b.location.x&&ball.location.x-ball.radius<b.location.x+b.w))
-        //){
-        //ball.velocity.y *= -1;
-        //b.location = new PVector(-100, -100);
+      // right hit
+      if ((ball.location.x-ball.radius<=b.location.x+b.w && ball.location.x-ball.radius>b.location.x) && (ball.location.y+ball.radius>=b.location.y&&ball.location.y-ball.radius<b.location.y+b.h)){
+        ball.velocity.x =1;
+        b.location = new PVector(-100, -100);
+        bricksLeft--;
+      }
+      // left hit
+      if ((ball.location.x+ball.radius>=b.location.x && ball.location.x+ball.radius<b.location.x+b.w) && (ball.location.y+ball.radius>=b.location.y&&ball.location.y-ball.radius<b.location.y+b.h)){
+        ball.velocity.x =-1 ;
+        b.location = new PVector(-100, -100);
+        bricksLeft--;
+      }
         //} // can take out three, maybe check
     } // brick + ball collision, check this, may be buggy
     ball.move();
     ball.display();
+  }
   }
   // issue where ball can slide along the slider
   slider.move();
@@ -120,14 +192,49 @@ public void level1Screen(){
   //fill(255);
   //text(ball.location.y, 50, 50, 50);
   //text(slider.location.y, 10, 50, 50);
+  
+  // hearts
+  if (lives > 0)image(fullHeart, 30, 30);
+  else image(emptyHeart, 30, 30);
+  if (lives > 1)image(fullHeart, 90, 30);
+  else image(emptyHeart, 90, 30);
+  if (lives > 2)image(fullHeart, 150, 30);
+  else image(emptyHeart, 150, 30);
+  if (bricksLeft == 0) screenNum = 7;
+  if (lives == 0) screenNum = 6;
 } 
 public void level2Screen(){} // screen 2
 public void level3Screen(){} // screen 3
 //public void keyPressed(){}
 public void congratsScreen(){} // screen 5
+public void nextLevelScreen(){
+  // screen 7
+  level++;
+  fill(55);
+  stroke(255);
+  strokeWeight(5);
+  rect(width/2-325, height/2-150, 650, 300, 28);
+  if (mouseX>=width/2+10 && mouseX<= width/2+130 && mouseY>=height/2+40 && mouseY<=height/2+120){
+    fill(75);
+    if (mousePressed) screenNum++;
+  }else fill(55);
+  rect(width/2+10, height/2+40, 120, 80, 28);
+  if (mouseX>=width/2-130 && mouseX<= width/2-10 && mouseY>=height/2+40 && mouseY<=height/2+120) {
+    fill(75);
+    if (mousePressed){screenNum = 0;
+    mousePressed = false;}
+  }else fill(55);
+  rect(width/2-130, height/2+40, 120, 80, 28);
+  fill(255);
+  text("You passed this level!\nMove on to the next\nlevel.", width/2, height/2-75);
+  textSize(20);
+  text("▶", width/2+70, height/2+90);
+  text("Back", width/2-70, height/2+90);
+  textSize(25);
+} 
 public void homeScreen(){
     // screen 0
-  background(0);
+  textSize(50);
   fill(255);
   textFont(font);
   textAlign(CENTER);
@@ -155,7 +262,10 @@ public void homeScreen(){
   textSize(25);
   text("DIRECTIONS", width/2, height/2+90);
     // if play button is clicked go to level1Screen
-  if (mouseX>=width/2-175 && mouseX<= width/2+175 && mouseY>=height/2-50 && mouseY<=height/2+15 && mousePressed) screenNum = 1;
+  if (mouseX>=width/2-175 && mouseX<= width/2+175 && mouseY>=height/2-50 && mouseY<=height/2+15 && mousePressed) {
+    screenNum = level;
+    mousePressed = false;
+  }
   if (mouseX>=width/2-175 && mouseX<= width/2+175 && mouseY>=height/2+40 && mouseY<=height/2+115 && mousePressed) screenNum = 4;
   
 }
