@@ -15,6 +15,14 @@ Brick(int x, int y, int xVel, int yVel, int wid, int hei){
   c = color(155, 89, 182);
 } 
 
+Brick(int x, int y, int xVel, int yVel, int wid, int hei, color hue){ 
+  location = new PVector(x, y);
+  w = wid;
+  h = hei;
+  velocity = new PVector(xVel, yVel); 
+  c = hue;
+} 
+
 void move(){
   location = location.add(velocity); 
   if (location.x > w || location.x < 0){ 

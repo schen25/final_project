@@ -2,7 +2,6 @@ int lives = 3;
 int screenNum = 0;
 int level = 1;
 ArrayList<Brick> wall = new ArrayList<Brick>();
-ArrayList<Brick> wallCopy = new ArrayList<Brick>();
 PFont font;
 PImage fullHeart;
 PImage emptyHeart;
@@ -10,6 +9,7 @@ Ball ball;
 Slider slider;
 boolean fallen;
 int bricksLeft;
+color[] colors = {color(210, 43, 43), color(242, 140, 40), color(80, 200, 120), color(0, 150, 255), color(155, 89, 182)};
 // for text color stuff
 int textAnimCol = 255;
 boolean gradientDirection = false;
@@ -21,12 +21,11 @@ public void setup(){
   font = createFont("PressStart2P-Regular.ttf", 50);
   for (int i = 200; i < 325; i+=25){ 
     for (int j = 0; j < 800; j+= 80){ 
-      Brick a = new Brick(j, i, 0, 0, 80, 25);
+      Brick a = new Brick(j, i, 0, 0, 80, 25, colors[(i-200)/25]);
       wall.add(a);
       bricksLeft++;
     } 
   }
-  wallCopy = (ArrayList)wall.clone();
   fullHeart = loadImage("fullHeart.png");
   emptyHeart = loadImage("emptyHeart.png");
   fallen=true;
@@ -85,7 +84,15 @@ public void retryScreen(){
       screenNum = level;
       lives = 3;
       mousePressed = false;
-      wall = (ArrayList)wallCopy.clone();
+      bricksLeft = 0;
+      wall = new ArrayList<Brick>();
+      for (int i = 200; i < 325; i+=25){ 
+        for (int j = 0; j < 800; j+= 80){ 
+          Brick a = new Brick(j, i, 0, 0, 80, 25, colors[(i-200)/25]);
+          wall.add(a);
+          bricksLeft++;
+        } 
+      }
       slider.location = new PVector(width/2-45, height-50);
     }
   }else fill(55);
@@ -95,7 +102,15 @@ public void retryScreen(){
     if (mousePressed){screenNum = 0;
     lives = 3;
     mousePressed = false;
-    wall = (ArrayList)wallCopy.clone(); // make copy of orig array?
+    bricksLeft = 0;
+    wall = new ArrayList<Brick>();
+      for (int i = 200; i < 325; i+=25){ 
+        for (int j = 0; j < 800; j+= 80){ 
+          Brick a = new Brick(j, i, 0, 0, 80, 25, colors[(i-200)/25]);
+          wall.add(a);
+          bricksLeft++;
+        } 
+      }
     slider.location = new PVector(width/2-45, height-50);
     }
   }else fill(55);
@@ -122,8 +137,7 @@ public void directionScreen(){
 }
 
 public void level1Screen(){
-  //text(ball.location.y, 100, 100);
-  //text(fallen + "", 100, 150);
+  bricksLeft = 0;
   // screen 1
   for (Brick b : wall){
     b.display();
@@ -202,6 +216,8 @@ public void level1Screen(){
   else image(emptyHeart, 150, 30);
   if (bricksLeft == 0) screenNum = 7;
   if (lives == 0) screenNum = 6;
+  fill(255);
+  text("Level 1",650, 80);
 } 
 public void level2Screen(){} // screen 2
 public void level3Screen(){} // screen 3
@@ -210,22 +226,29 @@ public void congratsScreen(){} // screen 5
 public void nextLevelScreen(){
   // screen 7
   level++;
-  fill(55);
-  stroke(255);
+  fill(#f2d852);
+  stroke(#bf8508);
   strokeWeight(5);
   rect(width/2-325, height/2-150, 650, 300, 28);
   if (mouseX>=width/2+10 && mouseX<= width/2+130 && mouseY>=height/2+40 && mouseY<=height/2+120){
     fill(75);
-    if (mousePressed) screenNum++;
+    if (mousePressed) {
+    screenNum++;
+    mousePressed = false;
+    lives = 3;
+  }
   }else fill(55);
   rect(width/2+10, height/2+40, 120, 80, 28);
   if (mouseX>=width/2-130 && mouseX<= width/2-10 && mouseY>=height/2+40 && mouseY<=height/2+120) {
     fill(75);
-    if (mousePressed){screenNum = 0;
-    mousePressed = false;}
+    if (mousePressed){
+      screenNum = 0;
+      mousePressed = false;
+      lives = 3;  
+  }
   }else fill(55);
   rect(width/2-130, height/2+40, 120, 80, 28);
-  fill(255);
+  fill(#bf8508);
   text("You passed this level!\nMove on to the next\nlevel.", width/2, height/2-75);
   textSize(20);
   text("▶", width/2+70, height/2+90);
