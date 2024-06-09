@@ -2,6 +2,7 @@ int lives = 3;
 int screenNum = 0;
 int level = 1;
 ArrayList<Brick> wall = new ArrayList<Brick>();
+ArrayList<Brick> wall3 = new ArrayList<Brick>();
 PFont font;
 PImage fullHeart;
 PImage emptyHeart;
@@ -9,7 +10,8 @@ Ball ball;
 Slider slider;
 boolean fallen;
 int bricksLeft;
-color[] colors = {color(210, 43, 43), color(242, 140, 40), color(80, 200, 120), color(0, 150, 255), color(155, 89, 182)};
+int bricksLeft3;
+color[] colors = {color(210, 43, 43), color(242, 140, 40), #fcf647, color(80, 200, 120), color(0, 150, 255), color(155, 89, 182)};
 // for text color stuff
 int textAnimCol = 255;
 boolean gradientDirection = false;
@@ -19,11 +21,25 @@ public void setup(){
   ball = new Ball();
   slider = new Slider();
   font = createFont("PressStart2P-Regular.ttf", 50);
+  //wall
   for (int i = 200; i < 325; i+=25){ 
     for (int j = 0; j < 800; j+= 80){ 
       Brick a = new Brick(j, i, 0, 0, 80, 25, colors[(i-200)/25]);
       wall.add(a);
       bricksLeft++;
+    } 
+  }
+  //wall3
+  for (int i = 175; i < 325; i+=25){ 
+    for (int j = 0; j < 800; j+= 200){ 
+      Brick a;
+      if (((j/200%2 == 1)&&((i-175)/25%2 == 0))||(((j/200%2 == 0)&&((i-175)/25%2 == 1)))){
+        a = new Brick(j+120, i, -1, 0, 80, 25, colors[(i-175)/25], j);
+      } else{
+        a = new Brick(j, i, 1, 0, 80, 25, colors[(i-175)/25], j);
+      }
+      wall3.add(a);
+      bricksLeft3++;
     } 
   }
   fullHeart = loadImage("fullHeart.png");
@@ -84,14 +100,31 @@ public void retryScreen(){
       screenNum = level;
       lives = 3;
       mousePressed = false;
-      bricksLeft = 0;
-      wall = new ArrayList<Brick>();
-      for (int i = 200; i < 325; i+=25){ 
-        for (int j = 0; j < 800; j+= 80){ 
-          Brick a = new Brick(j, i, 0, 0, 80, 25, colors[(i-200)/25]);
-          wall.add(a);
-          bricksLeft++;
-        } 
+      if (level<3){
+        bricksLeft = 0;
+        wall = new ArrayList<Brick>();
+        for (int i = 200; i < 325; i+=25){ 
+          for (int j = 0; j < 800; j+= 80){ 
+            Brick a = new Brick(j, i, 0, 0, 80, 25, colors[(i-200)/25]);
+            wall.add(a);
+            bricksLeft++;
+          } 
+        }
+      }else{
+        bricksLeft3 = 0;
+        wall = new ArrayList<Brick>();
+        for (int i = 175; i < 325; i+=25){ 
+          for (int j = 0; j < 800; j+= 200){ 
+            Brick a;
+            if (((j/200%2 == 1)&&((i-175)/25%2 == 0))||(((j/200%2 == 0)&&((i-175)/25%2 == 1)))){
+              a = new Brick(j+120, i, -1, 0, 80, 25, colors[(i-175)/25], j);
+            } else{
+              a = new Brick(j, i, 1, 0, 80, 25, colors[(i-175)/25], j);
+            }
+            wall3.add(a);
+            bricksLeft3++;
+          } 
+        }
       }
       slider.location = new PVector(width/2-45, height-50);
     }
@@ -137,7 +170,6 @@ public void directionScreen(){
 }
 
 public void level1Screen(){
-  bricksLeft = 0;
   // screen 1
   for (Brick b : wall){
     b.display();
@@ -220,7 +252,84 @@ public void level1Screen(){
   text("Level 1",650, 80);
 } 
 public void level2Screen(){} // screen 2
-public void level3Screen(){} // screen 3
+public void level3Screen(){
+  // screen 3
+   for (Brick b : wall3){
+    b.display();
+    b.move();
+  }
+  if (ball.location.y>=height) {
+    lives--;
+    ball.location = new PVector(-100, -100);
+    ball.velocity = new PVector(0,0);
+    fallen = true;
+  }
+  else{
+    if (fallen) respawnBall();
+    else{
+    ball.bounce();
+    // bounce upwards
+    if ((ball.location.y+ball.radius>=slider.location.y && ball.location.y+ball.radius<slider.location.y+slider.h) && (ball.location.x+ball.radius>=slider.location.x&&ball.location.x-ball.radius<=slider.location.x+slider.w)){
+      ball.velocity.y *= -1;
+      ball.velocity.x = (random(0,4))-2; 
+      ball.location.y = slider.location.y-ball.radius-1;
+    } 
+    if ((ball.location.x+ball.radius>=slider.location.x && ball.location.x+ball.radius<slider.location.x+slider.w) && (ball.location.y+ball.radius>=slider.location.y&&ball.location.y-ball.radius<=slider.location.y+slider.h)) {
+      ball.velocity.x = -1*slider.speed;
+      ball.location.x = slider.location.x-ball.radius-1;
+    }
+    if ((ball.location.x-ball.radius<=slider.location.x+slider.w && ball.location.x-ball.radius>slider.location.x) && (ball.location.y+ball.radius>=slider.location.y&&ball.location.y-ball.radius<=slider.location.y+slider.h)){
+      ball.velocity.x = slider.speed;
+      ball.location.x = slider.location.x+slider.w+ball.radius+1;
+    } 
+    for (Brick b : wall3){  
+      // bottom brick hit
+      if (((ball.location.y-ball.radius<=b.location.y+b.h && ball.location.y-ball.radius>b.location.y) && (ball.location.x+ball.radius>=b.location.x&&ball.location.x-ball.radius<b.location.x+b.w)) ){
+        ball.velocity.y = 5;
+        ball.velocity.x = (random(0,5))-2;
+        b.location = new PVector(-100, -100);
+        bricksLeft3--;
+      }
+      //top brick hit
+      if ((ball.location.y+ball.radius>=b.location.y && ball.location.y+ball.radius<b.location.y+b.h) && (ball.location.x+ball.radius>=b.location.x&&ball.location.x-ball.radius<b.location.x+b.w)){
+        ball.velocity.y = -5;
+        ball.velocity.x = (random(0,5))-2;
+        b.location = new PVector(-100, -100);
+        bricksLeft3--;
+      }
+      // right hit
+      if ((ball.location.x-ball.radius<=b.location.x+b.w && ball.location.x-ball.radius>b.location.x) && (ball.location.y+ball.radius>=b.location.y&&ball.location.y-ball.radius<b.location.y+b.h)){
+        ball.velocity.x =1;
+        b.location = new PVector(-100, -100);
+        bricksLeft3--;
+      }
+      // left hit
+      if ((ball.location.x+ball.radius>=b.location.x && ball.location.x+ball.radius<b.location.x+b.w) && (ball.location.y+ball.radius>=b.location.y&&ball.location.y-ball.radius<b.location.y+b.h)){
+        ball.velocity.x =-1 ;
+        b.location = new PVector(-100, -100);
+        bricksLeft3--;
+      }
+    } 
+    ball.move();
+    ball.display();
+  }
+  }
+  slider.move();
+  slider.display();
+  fill(100, 21, 0);
+  
+  // hearts
+  if (lives > 0)image(fullHeart, 30, 30);
+  else image(emptyHeart, 30, 30);
+  if (lives > 1)image(fullHeart, 90, 30);
+  else image(emptyHeart, 90, 30);
+  if (lives > 2)image(fullHeart, 150, 30);
+  else image(emptyHeart, 150, 30);
+  if (bricksLeft3 == 0) screenNum = 7;
+  if (lives == 0) screenNum = 6;
+  fill(255);
+  text("Level 3",650, 80);
+} 
 //public void keyPressed(){}
 public void congratsScreen(){} // screen 5
 public void nextLevelScreen(){
