@@ -1,6 +1,6 @@
 int lives = 3;
-int screenNum = 4;
-int level = 2;
+int screenNum = 0;
+int level = 1;
 ArrayList<Brick> wall = new ArrayList<Brick>();
 ArrayList<Brick> wall3 = new ArrayList<Brick>();
 PFont font;
@@ -252,7 +252,7 @@ public void level1Screen(){
   text("Level 1",650, 80);
 } 
 public void level2Screen(){
-  // Display bricks
+   //Display bricks
   for (Brick b : wall){
     b.display((int) (Math.random() * 5) + 1);
   }

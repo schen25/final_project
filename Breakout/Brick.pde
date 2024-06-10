@@ -5,7 +5,7 @@ int h;
 PVector location;
 int origX;
 color c;
-float hitsNeeded;
+int hitsNeeded;
 PVector velocity;
 
 Brick(int x, int y, float xVel, float yVel, int wid, int hei){ 
@@ -25,8 +25,7 @@ Brick(int x, int y, float xVel, float yVel, int wid, int hei, color hue){
   c = hue;
 } 
 
-
-Brick(int x, int y, float xVel, float yVel, int wid, int hei, float hits, color hue){ 
+Brick(int x, int y, float xVel, float yVel, int wid, int hei, int hits, color hue){ 
   location = new PVector(x, y);
   w = wid;
   h = hei;
@@ -34,6 +33,15 @@ Brick(int x, int y, float xVel, float yVel, int wid, int hei, float hits, color 
   c = hue;
   hitsNeeded = hits;
 } 
+//Brick(int x, int y, float xVel, float yVel, int wid, int hei, color hue, int oX, int hits){ 
+//  location = new PVector(x, y);
+//  w = wid;
+//  h = hei;
+//  velocity = new PVector(xVel, yVel); 
+//  c = hue;
+//  origX = oX;
+//  hitsNeeded = hits;
+//} 
 
 Brick(int x, int y, float xVel, float yVel, int wid, int hei, color hue, int oX){ 
   location = new PVector(x, y);
@@ -66,3 +74,4 @@ void display(int hits){
   rect(location.x, location.y, w, h);
   text(hits, location.x, location.y);
 } 
+}
