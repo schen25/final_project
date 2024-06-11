@@ -185,7 +185,7 @@ public void directionScreen(){
 public void level1Screen(){
   // screen 1
   for (Brick b : wall){
-    b.display();
+    b.display2();
   }
   if (ball.location.y>=height) {
     lives--;
@@ -267,8 +267,8 @@ public void level1Screen(){
 
 public void level2Screen(){
    //Display bricks
-  for (Brick b : wall){
-    b.display((int) (Math.random() * 5) + 1);
+  for (Brick b : wall2){
+    b.display();
   }
   
   if (ball.location.y>=height) {
