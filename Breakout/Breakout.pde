@@ -1,5 +1,5 @@
 int lives = 3;
-int screenNum = 0;
+int screenNum = 5;
 int level = 3;
 ArrayList<Brick> wall = new ArrayList<Brick>();
 ArrayList<Brick> wall2 = new ArrayList<Brick>();
@@ -178,7 +178,18 @@ public void directionScreen(){
   fill(255);
   textSize(25);
   text("◀ BACK", 150, 95);
-  text("Level 1: Use the left and right keys to control the sliders to make sure the ball doesn't get lost. Use the ball to break the bricks. You have three tries to clear all the bricks.", 0, 200);
+  textSize(20);
+  text("Level 1:", 400, 175);
+  textSize(10);
+  text("Use the left and right keys to control the sliders to make\nsure the ball doesn't get lost. Use the ball to break the bricks.\nYou have three tries to clear all the bricks.", 400, 200);
+   textSize(20);
+  text("Level 2:", 400, 275);
+  textSize(10);
+  text("Use the left and right keys to control the sliders to make\nsure the ball doesn't get lost. Use the ball to break the bricks.\nYou have three tries to clear all the bricks. Here, each brick needs\nto be hit a certain number of times to disappear.\nThis number is displayed in the middle of each brick.", 400, 300);
+  textSize(20);
+  text("Level 3:", 400, 425);
+  textSize(10);
+  text("Use the left and right keys to control the sliders to make\nsure the ball doesn't get lost. Use the ball to break the bricks.\nYou have three tries to clear all the bricks. Here, each brick needs\nto be hit a certain number of times to disappear.\nThis number is displayed in the middle of each brick. In\nthis level, the bricks are also moving from side to side. ", 400, 450);
   if (mouseX>=50 && mouseX<= 245 && mouseY>=50 && mouseY<=115 &&mousePressed) screenNum = 0;
 }
 
@@ -451,7 +462,15 @@ public void level3Screen(){
 
 //public void keyPressed(){}
 
-public void congratsScreen(){}// screen 5
+public void congratsScreen(){
+textSize(50);
+  fill(255);
+  textFont(font);
+  textAlign(CENTER);
+  text("CONGRATS", width/2, height/2-200);
+  textSize(30); 
+  text("You won the game!!", 400, 400);
+}// screen 5
 
 public void nextLevelScreen(){
   // screen 7
