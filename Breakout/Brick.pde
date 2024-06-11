@@ -53,14 +53,10 @@ void display() {
     text(hitsNeeded, location.x + w/2, location.y + h/2); // Display hitsNeeded in the middle of the brick
 }
  
-void display(color hue){
+void display2(){
   stroke(1);
   strokeWeight(2);
   fill(c);
   rect(location.x, location.y, w, h);
-  textSize(10);
-    fill(hue);
-  text(hitsNeeded, location.x+50, location.y+15);
-  c = hue;
  } 
 }
