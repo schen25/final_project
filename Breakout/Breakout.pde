@@ -127,12 +127,12 @@ public void retryScreen(){
         bricksLeft2 = 0;
         wall2 = new ArrayList<Brick>();
         for (int i = 200; i < 325; i+= 25){ 
-        for (int j = 0; j < 800; j +=80){ 
-          Brick a = new Brick (j, i, 0, 0, 80, 25, colors[(i-200)/25], hits[(i-200)/25]);
-          wall2.add(a);
-          bricksLeft2++;
+          for (int j = 0; j < 800; j +=80){ 
+            Brick a = new Brick (j, i, 0, 0, 80, 25, colors[(i-200)/25], hits[(i-200)/25]);
+            wall2.add(a);
+            bricksLeft2++;
+          } 
         } 
-      } 
       }
       else{
         bricksLeft3 = 0;
@@ -186,17 +186,17 @@ public void retryScreen(){
         bricksLeft3 = 0;
         wall3 = new ArrayList<Brick>();
         for (int i = 175; i < 325; i+=25){
-        for (int j = 0; j < 800; j+= 200){
-          Brick a;
-          if (((j/200%2 == 1)&&((i-175)/25%2 == 0))||(((j/200%2 == 0)&&((i-175)/25%2 == 1)))){
-            a = new Brick(j+120, i, -1, 0, 80, 25, colors[(i-175)/25], j, hits2[(i-175)/25]);
-          } else{
-            a = new Brick(j, i, 1, 0, 80, 25, colors[(i-175)/25], j, hits2[(i-175)/25]);
+          for (int j = 0; j < 800; j+= 200){
+            Brick a;
+            if (((j/200%2 == 1)&&((i-175)/25%2 == 0))||(((j/200%2 == 0)&&((i-175)/25%2 == 1)))){
+              a = new Brick(j+120, i, -1, 0, 80, 25, colors[(i-175)/25], j, hits2[(i-175)/25]);
+            } else{
+              a = new Brick(j, i, 1, 0, 80, 25, colors[(i-175)/25], j, hits2[(i-175)/25]);
+            }
+            wall3.add(a);
+            bricksLeft3++;
           }
-          wall3.add(a);
-          bricksLeft3++;
         }
-      }
       }
       slider.location = new PVector(width/2-45, height-50);
     }
@@ -220,7 +220,18 @@ public void directionScreen(){
   fill(255);
   textSize(25);
   text("◀ BACK", 150, 95);
-  text("Level 1: Use the left and right keys to control the sliders to make sure the ball doesn't get lost. Use the ball to break the bricks. You have three tries to clear all the bricks.", 0, 200);
+  textSize(20);
+  text("Level 1:", 400, 175);
+  textSize(10);
+  text("Use the left and right keys to control the sliders to make\nsure the ball doesn't get lost. Use the ball to break the bricks.\nYou have three tries to clear all the bricks.", 400, 200);
+   textSize(20);
+  text("Level 2:", 400, 275);
+  textSize(10);
+  text("Use the left and right keys to control the sliders to make\nsure the ball doesn't get lost. Use the ball to break the bricks.\nYou have three tries to clear all the bricks. Here, each brick needs\nto be hit a certain number of times to disappear.\nThis number is displayed in the middle of each brick.", 400, 300);
+  textSize(20);
+  text("Level 3:", 400, 425);
+  textSize(10);
+  text("Use the left and right keys to control the sliders to make\nsure the ball doesn't get lost. Use the ball to break the bricks.\nYou have three tries to clear all the bricks. Here, each brick needs\nto be hit a certain number of times to disappear.\nThis number is displayed in the middle of each brick. In\nthis level, the bricks are also moving from side to side. ", 400, 450);
   if (mouseX>=50 && mouseX<= 245 && mouseY>=50 && mouseY<=115 &&mousePressed) screenNum = 0;
 }
 
@@ -394,7 +405,7 @@ public void level2Screen(){
     if (lives > 2) image(fullHeart, 150, 30);
     else image(emptyHeart, 150, 30);
 
-    if (bricksLeft == 0) screenNum = 7;
+    if (bricksLeft2 == 0) screenNum = 7;
     if (lives == 0) screenNum = 6;
 
     fill(255);
@@ -485,7 +496,7 @@ public void level3Screen(){
   else image(emptyHeart, 90, 30);
   if (lives > 2)image(fullHeart, 150, 30);
   else image(emptyHeart, 150, 30);
-  if (bricksLeft3 == 0) screenNum = 7;
+  if (bricksLeft3 == 0) screenNum = 5;
   if (lives == 0) screenNum = 6;
   fill(255);
   textSize(25);
@@ -494,11 +505,19 @@ public void level3Screen(){
 
 //public void keyPressed(){}
 
-public void congratsScreen(){}// screen 5
+public void congratsScreen(){
+  //screen 5
+  textSize(50);
+  fill(255);
+  textFont(font);
+  textAlign(CENTER);
+  text("CONGRATS", width/2, height/2-200);
+  textSize(30); 
+  text("You won the game!!", 400, 400);
+}
 
 public void nextLevelScreen(){
   // screen 7
-  level++;
   fill(#f2d852);
   stroke(#bf8508);
   strokeWeight(5);
@@ -506,19 +525,51 @@ public void nextLevelScreen(){
   if (mouseX>=width/2+10 && mouseX<= width/2+130 && mouseY>=height/2+40 && mouseY<=height/2+120){
     fill(75);
     if (mousePressed) {
-    screenNum++;
     level++;
+    screenNum=level;
     mousePressed = false;
     lives = 3;
+    if (level==2){
+    bricksLeft2 = 0;
+        wall2 = new ArrayList<Brick>();
+        for (int i = 200; i < 325; i+= 25){ 
+          for (int j = 0; j < 800; j +=80){ 
+            Brick a = new Brick (j, i, 0, 0, 80, 25, colors[(i-200)/25], hits[(i-200)/25]);
+            wall2.add(a);
+            bricksLeft2++;
+          } 
+        } 
+    }
+    if (level==3){
+      bricksLeft3 = 0;
+        wall3 = new ArrayList<Brick>();
+        for (int i = 175; i < 325; i+=25){
+          for (int j = 0; j < 800; j+= 200){
+            Brick a;
+            if (((j/200%2 == 1)&&((i-175)/25%2 == 0))||(((j/200%2 == 0)&&((i-175)/25%2 == 1)))){
+              a = new Brick(j+120, i, -1, 0, 80, 25, colors[(i-175)/25], j, hits2[(i-175)/25]);
+            } else{
+              a = new Brick(j, i, 1, 0, 80, 25, colors[(i-175)/25], j, hits2[(i-175)/25]);
+            }
+            wall3.add(a);
+            bricksLeft3++;
+          }
+        }
+    }
+    slider.location = new PVector(width/2-45, height-50);
+    fallen = true;
   }
   }else fill(55);
   rect(width/2+10, height/2+40, 120, 80, 28);
   if (mouseX>=width/2-130 && mouseX<= width/2-10 && mouseY>=height/2+40 && mouseY<=height/2+120) {
     fill(75);
     if (mousePressed){
+      level++;
       screenNum = 0;
       mousePressed = false;
       lives = 3;  
+      slider.location = new PVector(width/2-45, height-50);
+      fallen = true;
   }
   }else fill(55);
   rect(width/2-130, height/2+40, 120, 80, 28);
