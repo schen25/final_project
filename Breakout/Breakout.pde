@@ -99,7 +99,6 @@ public void respawnBall(){
     fallen = false;
   }
 }
-public void removeBrick(){}
 public void retryScreen(){
   // screen6
   fill(55);
